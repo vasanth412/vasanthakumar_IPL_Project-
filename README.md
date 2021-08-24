@@ -50,5 +50,9 @@ Output files
 ## **Run Command for this IPL-Project**
 Type the command **npm start**.
 
+## Formula
+Calculate bowler economy
+
+Bowler economy = Runs conceded/ Overs Bowler Bowled
 
 
