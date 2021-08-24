@@ -1,0 +1,16 @@
+{
+  "name": "ipl-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "text": "module",
+  "scripts": {
+    "start": "node src/server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vasanthakumar",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0"
+  }
+}
