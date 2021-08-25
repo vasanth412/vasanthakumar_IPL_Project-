@@ -1,28 +1,45 @@
-const { match } = require('assert');
 const csv = require('csv-parser');
 const fs = require('fs');
-var myFunction = require("../server/ipl.js");
+const myFunction = require('./ipl');
 
-let matches = [];
-let deliveries = [];
+const matches = [];
+const deliveries = [];
 
-fs.createReadStream('src/data/matches.csv').pipe(csv({}))
-.on('data', (data) => matches.push(data))
-.on('end',()=> {
-fs.createReadStream('src/data/deliveries.csv').pipe(csv({}))
-.on('data', (data) => deliveries.push(data))
-.on('end',()=> {
+fs.createReadStream('src/data/matches.csv')
+  .pipe(csv({}))
+  .on('data', (data) => matches.push(data))
+  .on('end', () => {
+    fs.createReadStream('src/data/deliveries.csv')
+      .pipe(csv({}))
+      .on('data', (data) => deliveries.push(data))
+      .on('end', () => {
+        const DeliveryLength = deliveries.length;
+        const matchesPerYear = JSON.stringify(myFunction.totalMatches(matches));
+        const matchesWonPerYear = JSON.stringify(
+          myFunction.matchesWonPerYear(matches),
+        );
+        const extraRunsPerTeam2016 = JSON.stringify(
+          myFunction.extraRuns2016(matches, DeliveryLength, deliveries),
+        );
+        const economicalBowlers2015 = JSON.stringify(
+          myFunction.economicalBowlers2015(matches, deliveries, DeliveryLength),
+        );
 
-let length = deliveries.length;
-let matchesPerYear = JSON.stringify(myFunction.totalMatches(matches));
-let matchesWonPerYear = JSON.stringify(myFunction.matchesWonPerYear(matches));
-let extraRunsPerTeam2016 = JSON.stringify(myFunction.extraRuns2016(matches, length, deliveries));
-let economicalBowlers2015 = JSON.stringify(myFunction.economicalBowlers2015(matches, deliveries, length));
-
-fs.writeFileSync("./src/public/output/matchesPerYear.json", matchesPerYear);
-fs.writeFileSync("./src/public/output/matchesWonPerYear.json", matchesWonPerYear);
-fs.writeFileSync("./src/public/output/extraRunsPerTeam2016.json", extraRunsPerTeam2016);
-fs.writeFileSync("./src/public/output/economicalBowlers2015.json", economicalBowlers2015);
-
-}
-)});
+        fs.writeFileSync(
+          './src/public/output/matchesPerYear.json',
+          matchesPerYear,
+        );
+        fs.writeFileSync(
+          './src/public/output/matchesWonPerYear.json',
+          matchesWonPerYear,
+        );
+        fs.writeFileSync(
+          './src/public/output/extraRunsPerTeam2016.json',
+          extraRunsPerTeam2016,
+        );
+        fs.writeFileSync(
+          './src/public/output/economicalBowlers2015.json',
+          economicalBowlers2015,
+        );
+      });
+  });

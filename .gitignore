@@ -1,5 +1,7 @@
 # Logs
 node_modules
+.eslintrc.json
+.prettierrc
 logs
 *.log
 npm-debug.log*

@@ -8,7 +8,22 @@ ISC - The ISC license is a permissive free software license published by the Int
 
 ## **Dependency**
 Using csv parser 3.0.0
+```bash
 npm install csv-parser
+```
+
+## **devDependency**
+eslint
+Command for install eslint
+
+```bash
+npm install -g eslint
+```
+prettier
+```bash
+npm install prettier
+```
+
 
 ## **File directories**
 - src folder
