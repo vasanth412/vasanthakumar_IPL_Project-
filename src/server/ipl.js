@@ -1,25 +1,23 @@
 function totalMatches(matches) {
   const matchesCount = {};
-
-  for (let index = 0; index < matches.length; index += 1) {
-    const seasons = matches[index].season;
-
-    if (matchesCount[seasons] === undefined) {
-      matchesCount[seasons] = 1;
+  matches.forEach((element) => {
+    const currentSeason = element.season;
+    if (matchesCount[currentSeason] === undefined) {
+      matchesCount[currentSeason] = 1;
     } else {
-      matchesCount[seasons] += 1;
+      matchesCount[currentSeason] += 1;
     }
-  }
+  });
   return matchesCount;
 }
 
 function teamPerSeason(matches) {
   const team = {};
 
-  for (let index = 0; index < matches.length; index += 1) {
-    const currentSeason = matches[index].season;
-    const teamOne = matches[index].team1;
-    const teamTwo = matches[index].team2;
+  matches.forEach((match) => {
+    const currentSeason = match.season;
+    const teamOne = match.team1;
+    const teamTwo = match.team2;
 
     if (team[currentSeason] === undefined) {
       team[currentSeason] = {};
@@ -35,7 +33,7 @@ function teamPerSeason(matches) {
         team[currentSeason][teamOne] += 1;
       }
     }
-  }
+  });
 
   return team;
 }
@@ -43,9 +41,9 @@ function teamPerSeason(matches) {
 function matchesWonPerYear(matches) {
   const winningTeam = {};
 
-  for (let index = 0; index < matches.length; index += 1) {
-    const currentSeason = matches[index].season;
-    const currentWinner = matches[index].winner;
+  matches.forEach((match) => {
+    const currentSeason = match.season;
+    const currentWinner = match.winner;
 
     if (winningTeam[currentSeason] === undefined) {
       winningTeam[currentSeason] = {};
@@ -55,35 +53,33 @@ function matchesWonPerYear(matches) {
     } else {
       winningTeam[currentSeason][currentWinner] += 1;
     }
-  }
+  });
   return winningTeam;
 }
 
-function extraRuns2016(matches, length, deliveries) {
+function extraRuns2016(matches, deliveries) {
   const extraRun = {};
+  const matchID = [];
 
-  for (let index1 = 0; index1 < matches.length; index1 += 1) {
-    const currentSeason = matches[index1].season;
+  const match2016 = matches.filter((match) => match.season === '2016');
 
-    if (currentSeason === '2016') {
-      const matchID = matches[index1].id;
+  match2016.forEach((match) => {
+    matchID.push(match.id);
+  });
+  deliveries.forEach((delivery) => {
+    const bowlingTeam = delivery.bowling_team;
+    const deliveryID = delivery.match_id;
 
-      for (let index = 0; index < length; index += 1) {
-        const bowlingTeam = deliveries[index].bowling_team;
-        const deliveryID = deliveries[index].match_id;
+    if (matchID.includes(deliveryID)) {
+      const extras = Number(delivery.extra_runs);
 
-        if (deliveryID === matchID) {
-          const extras = Number(deliveries[index].extra_runs);
-
-          if (extraRun[bowlingTeam] === undefined) {
-            extraRun[bowlingTeam] = extras;
-          } else {
-            extraRun[bowlingTeam] += extras;
-          }
-        }
+      if (extraRun[bowlingTeam] === undefined) {
+        extraRun[bowlingTeam] = extras;
+      } else {
+        extraRun[bowlingTeam] += extras;
       }
     }
-  }
+  });
   return extraRun;
 }
 
@@ -92,10 +88,10 @@ function totalOver(bowler, deliveries, matchID) {
   let checkOver = 0;
   let flag = true;
 
-  for (let index = 0; index < deliveries.length; index += 1) {
-    const id = deliveries[index].match_id;
-    const currentOver = deliveries[index].over;
-    const currentBowler = deliveries[index].bowler;
+  deliveries.forEach((delivery) => {
+    const id = delivery.match_id;
+    const currentOver = delivery.over;
+    const currentBowler = delivery.bowler;
 
     if (matchID.includes(id)) {
       if (currentBowler === bowler) {
@@ -110,27 +106,27 @@ function totalOver(bowler, deliveries, matchID) {
         }
       }
     }
-  }
+  });
   return overs;
 }
 
-function economicalBowlers2015(matches, deliveries, length) {
+function economicalBowlers2015(matches, deliveries) {
   const bowlers = {};
   const matchID = [];
 
-  for (let index = 0; index < matches.length; index += 1) {
-    const currentSeason = matches[index].season;
-    const currentID = matches[index].id;
+  matches.forEach((match) => {
+    const currentSeason = match.season;
+    const currentID = match.id;
 
     if (currentSeason === '2015') {
       matchID.push(currentID);
     }
-  }
+  });
 
-  for (let index = 0; index < length; index += 1) {
-    const currentBowler = deliveries[index].bowler;
-    const totalRun = Number(deliveries[index].total_runs);
-    const id = deliveries[index].match_id;
+  deliveries.forEach((delivery) => {
+    const currentBowler = delivery.bowler;
+    const totalRun = Number(delivery.total_runs);
+    const id = delivery.match_id;
 
     if (matchID.includes(id)) {
       if (bowlers[currentBowler] === undefined) {
@@ -139,7 +135,7 @@ function economicalBowlers2015(matches, deliveries, length) {
         bowlers[currentBowler] += totalRun;
       }
     }
-  }
+  });
 
   const economy = {};
 

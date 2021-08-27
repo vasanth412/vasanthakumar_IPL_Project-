@@ -14,12 +14,13 @@ fs.createReadStream('src/data/matches.csv')
       .on('data', (data) => deliveries.push(data))
       .on('end', () => {
         const DeliveryLength = deliveries.length;
+
         const matchesPerYear = JSON.stringify(myFunction.totalMatches(matches));
         const matchesWonPerYear = JSON.stringify(
           myFunction.matchesWonPerYear(matches),
         );
         const extraRunsPerTeam2016 = JSON.stringify(
-          myFunction.extraRuns2016(matches, DeliveryLength, deliveries),
+          myFunction.extraRuns2016(matches, deliveries),
         );
         const economicalBowlers2015 = JSON.stringify(
           myFunction.economicalBowlers2015(matches, deliveries, DeliveryLength),
