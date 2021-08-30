@@ -2,17 +2,22 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>"Matches played per year"</title>
+        <title>"IPL data project"</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="matchesPerYear"></div>
-        <section class="matchesWonPerYear">
+        <div class="chart-container" id="matchesPerYear"></div>
+        <section class="chart-container">
             <select name="year" id="iplyear"></select>
             <div id="matchesWonPerYear"></div>
           </section>
-        <div id="extraRuns2016"></div>
-        <div id="economicalBowlers"></div>
+        <div class="chart-container" id="extraRuns2016"></div>
+        <div class="chart-container" id="economicalBowlers"></div>
         <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="highChart.js" ></script>
+        <script src="matchesPerYearChart.js" type="module"></script>
+        <script src="matchesWonPerYearChart.js" type="module"></script>
+        <script src="extraRuns2016Chart.js" type="module"></script>
+        <script src="economicalBowlers2015Chart.js" type="module"></script>
+        <script src="highChart.js" type="module" ></script>
     </body>
 </html>

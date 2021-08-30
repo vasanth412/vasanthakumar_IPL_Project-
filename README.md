@@ -41,6 +41,11 @@ npm install prettier
             - economicalBowlers.json
         - inex.html
         - style.css
+        - highChart.js
+        - matchesPerYearChart.js
+        - matchesWonPerYearChart.js
+        - extraRuns2016Chart.js
+        - economicalBowlers2015Chart.js
 - package.json
 - package-lock.json
 - .gitignore
@@ -64,16 +69,27 @@ Output files
 
 ## **Run Command for this IPL-Project**
 1. Getting json file.
-Type the command **npm start**.
+Type the command 
+    ```bash
+    npm start
+    ```
+
 2. Getting chart datas.
 change directories
     - IPL/
         - src/
             - public/
-3. Run the server
-Type command **http-server**
-4.Check the browser
-**http://localhost:8080/**
+
+3. Run the server.
+
+    Type command 
+    ```bash
+    http-server
+    ```
+
+4. Check the browser.
+
+    **http://localhost:8080/**
     
 
 ## Formula
