@@ -25,7 +25,7 @@ export function matchesWonPerYear(data) {
       align: 'center',
     },
     legend: {
-      enabled: false,
+      enabled: true,
     },
     tooltip: {
       shared: true,

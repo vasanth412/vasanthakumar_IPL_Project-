@@ -68,26 +68,30 @@ Output files
 4. Edit script in package.json file
 
 ## **Run Command for this IPL-Project**
-1. Getting json file.
+1. Branch name
+
+    **highcharts**
+
+2. Getting json file.
 Type the command 
     ```bash
     npm start
     ```
 
-2. Getting chart datas.
+3. Getting chart datas.
 change directories
     - IPL/
         - src/
             - public/
 
-3. Run the server.
+4. Run the server.
 
     Type command 
     ```bash
     http-server
     ```
 
-4. Check the browser.
+5. Check the browser.
 
     **http://localhost:8080/**
     
