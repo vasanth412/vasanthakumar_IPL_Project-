@@ -1,6 +1,7 @@
+const myFunction = require('./ipl');
+const { match } = require('assert');
 const csv = require('csv-parser');
 const fs = require('fs');
-const myFunction = require('./ipl');
 
 const matches = [];
 const deliveries = [];
@@ -17,30 +18,30 @@ fs.createReadStream('src/data/matches.csv')
 
         const matchesPerYear = JSON.stringify(myFunction.totalMatches(matches));
         const matchesWonPerYear = JSON.stringify(
-          myFunction.matchesWonPerYear(matches),
+          myFunction.matchesWonPerYear(matches)
         );
         const extraRunsPerTeam2016 = JSON.stringify(
-          myFunction.extraRuns2016(matches, deliveries),
+          myFunction.extraRuns2016(matches, deliveries)
         );
         const economicalBowlers2015 = JSON.stringify(
-          myFunction.economicalBowlers2015(matches, deliveries, DeliveryLength),
+          myFunction.economicalBowlers2015(matches, deliveries, DeliveryLength)
         );
 
         fs.writeFileSync(
           './src/public/output/matchesPerYear.json',
-          matchesPerYear,
+          matchesPerYear
         );
         fs.writeFileSync(
           './src/public/output/matchesWonPerYear.json',
-          matchesWonPerYear,
+          matchesWonPerYear
         );
         fs.writeFileSync(
           './src/public/output/extraRunsPerTeam2016.json',
-          extraRunsPerTeam2016,
+          extraRunsPerTeam2016
         );
         fs.writeFileSync(
           './src/public/output/economicalBowlers2015.json',
-          economicalBowlers2015,
+          economicalBowlers2015
         );
       });
   });

@@ -1,42 +1,44 @@
 function totalMatches(matches) {
-  const matchesCount = {};
-  matches.forEach((element) => {
-    const currentSeason = element.season;
-    if (matchesCount[currentSeason] === undefined) {
-      matchesCount[currentSeason] = 1;
-    } else {
-      matchesCount[currentSeason] += 1;
-    }
-  });
+  matchesCount = matches
+    .map((match) => match.season)
+    .reduce((season, currentSeason) => {
+      if (season[currentSeason]) {
+        season[currentSeason] += 1;
+      } else {
+        season[currentSeason] = 1;
+      }
+      return season;
+    }, {});
+
   return matchesCount;
 }
 
-function teamPerSeason(matches) {
-  const team = {};
+// function teamPerSeason(matches) {
+//   const team = {};
 
-  matches.forEach((match) => {
-    const currentSeason = match.season;
-    const teamOne = match.team1;
-    const teamTwo = match.team2;
+//   matches.forEach((match) => {
+//     const currentSeason = match.season;
+//     const teamOne = match.team1;
+//     const teamTwo = match.team2;
 
-    if (team[currentSeason] === undefined) {
-      team[currentSeason] = {};
-    } else {
-      if (team[currentSeason][teamTwo] === undefined) {
-        team[currentSeason][teamTwo] = 1;
-      } else {
-        team[currentSeason][teamTwo] += 1;
-      }
-      if (team[currentSeason][teamOne] === undefined) {
-        team[currentSeason][teamOne] = 1;
-      } else {
-        team[currentSeason][teamOne] += 1;
-      }
-    }
-  });
+//     if (team[currentSeason] === undefined) {
+//       team[currentSeason] = {};
+//     } else {
+//       if (team[currentSeason][teamTwo] === undefined) {
+//         team[currentSeason][teamTwo] = 1;
+//       } else {
+//         team[currentSeason][teamTwo] += 1;
+//       }
+//       if (team[currentSeason][teamOne] === undefined) {
+//         team[currentSeason][teamOne] = 1;
+//       } else {
+//         team[currentSeason][teamOne] += 1;
+//       }
+//     }
+//   });
 
-  return team;
-}
+//   return team;
+// }
 
 function matchesWonPerYear(matches) {
   const winningTeam = {};
@@ -45,41 +47,40 @@ function matchesWonPerYear(matches) {
     const currentSeason = match.season;
     const currentWinner = match.winner;
 
-    if (winningTeam[currentSeason] === undefined) {
-      winningTeam[currentSeason] = {};
-      winningTeam[currentSeason][currentWinner] = 1;
-    } else if (winningTeam[currentSeason][currentWinner] === undefined) {
-      winningTeam[currentSeason][currentWinner] = 1;
-    } else {
-      winningTeam[currentSeason][currentWinner] += 1;
+    if (currentWinner != '') {
+      if (winningTeam[currentSeason] === undefined) {
+        winningTeam[currentSeason] = {};
+        winningTeam[currentSeason][currentWinner] = 1;
+      } else if (winningTeam[currentSeason][currentWinner] === undefined) {
+        winningTeam[currentSeason][currentWinner] = 1;
+      } else {
+        winningTeam[currentSeason][currentWinner] += 1;
+      }
     }
   });
+
   return winningTeam;
 }
 
 function extraRuns2016(matches, deliveries) {
-  const extraRun = {};
-  const matchID = [];
+  const matchID = matches
+    .filter((match) => match.season === '2016')
+    .map((match) => match.id);
 
-  const match2016 = matches.filter((match) => match.season === '2016');
+  const extraRun = deliveries
+    .filter((delivery) => matchID.includes(delivery.match_id))
+    .reduce((delivery, currentDelivery) => {
+      const extras = Number(currentDelivery.extra_runs);
+      const bowlingTeam = currentDelivery.bowling_team;
 
-  match2016.forEach((match) => {
-    matchID.push(match.id);
-  });
-  deliveries.forEach((delivery) => {
-    const bowlingTeam = delivery.bowling_team;
-    const deliveryID = delivery.match_id;
-
-    if (matchID.includes(deliveryID)) {
-      const extras = Number(delivery.extra_runs);
-
-      if (extraRun[bowlingTeam] === undefined) {
-        extraRun[bowlingTeam] = extras;
+      if (delivery[bowlingTeam]) {
+        delivery[bowlingTeam] += extras;
       } else {
-        extraRun[bowlingTeam] += extras;
+        delivery[bowlingTeam] = extras;
       }
-    }
-  });
+      return delivery;
+    }, {});
+
   return extraRun;
 }
 
@@ -88,22 +89,22 @@ function totalOver(bowler, deliveries, matchID) {
   let checkOver = 0;
   let flag = true;
 
-  deliveries.forEach((delivery) => {
-    const id = delivery.match_id;
+  let overIterate = deliveries
+    .filter((delivery) => matchID.includes(delivery.match_id))
+    .filter((delivery) => delivery.bowler === bowler);
+
+  overIterate.forEach((delivery) => {
     const currentOver = delivery.over;
     const currentBowler = delivery.bowler;
 
-    if (matchID.includes(id)) {
-      if (currentBowler === bowler) {
-        if (flag) {
-          flag = false;
-          checkOver = currentOver;
-        }
-
-        if (checkOver !== currentOver) {
-          overs += 1;
-          flag = true;
-        }
+    if (currentBowler === bowler) {
+      if (flag) {
+        flag = false;
+        checkOver = currentOver;
+      }
+      if (checkOver !== currentOver) {
+        overs += 1;
+        flag = true;
       }
     }
   });
@@ -111,31 +112,24 @@ function totalOver(bowler, deliveries, matchID) {
 }
 
 function economicalBowlers2015(matches, deliveries) {
-  const bowlers = {};
-  const matchID = [];
+  const matchID = matches
+    .filter((match) => match.season === '2015')
+    .map((match) => match.id);
 
-  matches.forEach((match) => {
-    const currentSeason = match.season;
-    const currentID = match.id;
+  const bowlers = deliveries
+    .filter((delivery) => matchID.includes(delivery.match_id))
+    .reduce((delivery, currentDelivery) => {
+      const currentBowler = currentDelivery.bowler;
+      const totalRun = Number(currentDelivery.total_runs);
 
-    if (currentSeason === '2015') {
-      matchID.push(currentID);
-    }
-  });
-
-  deliveries.forEach((delivery) => {
-    const currentBowler = delivery.bowler;
-    const totalRun = Number(delivery.total_runs);
-    const id = delivery.match_id;
-
-    if (matchID.includes(id)) {
-      if (bowlers[currentBowler] === undefined) {
-        bowlers[currentBowler] = totalRun;
+      if (delivery[currentBowler]) {
+        delivery[currentBowler] += totalRun;
       } else {
-        bowlers[currentBowler] += totalRun;
+        delivery[currentBowler] = totalRun;
       }
-    }
-  });
+
+      return delivery;
+    }, {});
 
   const economy = {};
 
@@ -145,12 +139,9 @@ function economicalBowlers2015(matches, deliveries) {
     economy[key] = rate;
   }
 
-  const sorted = Object.entries(economy).sort((a, b) => a[1] - b[1]);
-  const topEconomy = [];
-
-  for (let index = 0; index < 10; index += 1) {
-    topEconomy.push(sorted[index]);
-  }
+  const topEconomy = Object.entries(economy)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 10);
 
   return topEconomy;
 }
@@ -160,5 +151,5 @@ module.exports = {
   matchesWonPerYear,
   extraRuns2016,
   economicalBowlers2015,
-  teamPerSeason,
+  //teamPerSeason,
 };
