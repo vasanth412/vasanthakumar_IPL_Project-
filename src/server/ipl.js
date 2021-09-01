@@ -41,24 +41,25 @@ function totalMatches(matches) {
 // }
 
 function matchesWonPerYear(matches) {
-  const winningTeam = {};
+  let winningTeam = matches
+    .filter((match) => match.winner !== '')
+    .map((match) => [match.season, match.winner])
+    .reduce((match, currentMatch) => {
+      let currentSeason = currentMatch[0];
+      let currentWinner = currentMatch[1];
 
-  matches.forEach((match) => {
-    const currentSeason = match.season;
-    const currentWinner = match.winner;
-
-    if (currentWinner != '') {
-      if (winningTeam[currentSeason] === undefined) {
-        winningTeam[currentSeason] = {};
-        winningTeam[currentSeason][currentWinner] = 1;
-      } else if (winningTeam[currentSeason][currentWinner] === undefined) {
-        winningTeam[currentSeason][currentWinner] = 1;
+      if (match[currentSeason] === undefined) {
+        match[currentSeason] = {};
+        match[currentSeason][currentWinner] = 1;
+      } else if (match[currentSeason][currentWinner] === undefined) {
+        match[currentSeason][currentWinner] = 1;
       } else {
-        winningTeam[currentSeason][currentWinner] += 1;
+        match[currentSeason][currentWinner] += 1;
       }
-    }
-  });
 
+      return match;
+    }, {});
+  console.log(winningTeam);
   return winningTeam;
 }
 
